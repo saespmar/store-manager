@@ -30,6 +30,10 @@ public class Category implements Serializable {
     private Set<Product> products = new HashSet<>();
 
     public Category() {}
+    
+    public Category(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;
