@@ -31,10 +31,11 @@ public class Opinion implements Serializable {
 
     public Opinion() {}
     
-    public Opinion(Customer customer, Product product, int rating) {
+    public Opinion(Customer customer, Product product, int rating, String review) {
         this.customer = customer;
         this.product = product;
         this.rating = rating;
+        this.review = review;
     }
     
     public Customer getCustomer() {

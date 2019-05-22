@@ -210,14 +210,14 @@ public class Customer implements Serializable {
         shoppingCart.setProduct(null);
     }
     
-    public void addOpinion(Product product, int rating) {
-        Opinion opinion = new Opinion(this, product, rating);
+    public void addOpinion(Product product, int rating, String review) {
+        Opinion opinion = new Opinion(this, product, rating, review);
         opinions.add(opinion);
         product.getOpinions().add(opinion);
     }
     
     public void removeOpinion(Product product) {
-        Opinion opinion = new Opinion(this, product, -1);
+        Opinion opinion = new Opinion(this, product, -1, null);
         product.getOpinions().remove(opinion);
         opinions.remove(opinion);
         opinion.setCustomer(null);
