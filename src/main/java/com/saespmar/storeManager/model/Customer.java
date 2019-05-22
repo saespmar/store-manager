@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.NaturalId;
 
@@ -57,13 +58,13 @@ public class Customer implements Serializable {
     @Column(name = "country")
     private String country;
     
-    @OneToMany(mappedBy="customer")
+    @OneToMany(mappedBy="customer", fetch = FetchType.EAGER)
     private Set<UserOrder> userOrders = new HashSet<>();
     
-    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ShoppingCart> inCart = new HashSet<>();
     
-    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Opinion> opinions = new HashSet<>();
 
     public Customer() {}
