@@ -149,7 +149,7 @@ public class Customer implements Serializable {
         return userState;
     }
 
-    public void setState(String userState) {
+    public void setUserState(String userState) {
         this.userState = userState;
     }
 
