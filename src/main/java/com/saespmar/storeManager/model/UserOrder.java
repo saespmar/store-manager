@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -46,7 +47,7 @@ public class UserOrder implements Serializable {
     @ManyToOne
     private Customer customer;
     
-    @OneToMany(mappedBy = "userOrder", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userOrder", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<OrderProducts> products = new HashSet<>();
 
     public UserOrder() {}

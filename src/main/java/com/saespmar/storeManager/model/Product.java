@@ -44,13 +44,13 @@ public class Product implements Serializable {
     @ManyToOne(optional = true)
     private SubProduct subProduct;
     
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<OrderProducts> userOrders = new HashSet<>();
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<ShoppingCart> carts = new HashSet<>();
     
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Opinion> opinions = new HashSet<>();
 
     public Product() {}

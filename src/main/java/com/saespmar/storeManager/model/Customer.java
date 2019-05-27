@@ -58,13 +58,13 @@ public class Customer implements Serializable {
     @Column(name = "country")
     private String country;
     
-    @OneToMany(mappedBy="customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<UserOrder> userOrders = new HashSet<>();
     
-    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<ShoppingCart> inCart = new HashSet<>();
     
-    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="customer", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Opinion> opinions = new HashSet<>();
 
     public Customer() {}
