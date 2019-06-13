@@ -56,4 +56,36 @@ public class PublicActions {
         
         return pdto;
     }
+
+	public static Set<OpinionDTO> getOpinions(int id){
+        if (id < 1) return null;
+        Product p = productOps.readProduct(id);
+        ProductDTO pdto = new ProductDTO();
+        pdto.setDescription(p.getDescription());
+        pdto.setId(p.getId());
+        pdto.setName(p.getName());
+        pdto.setPrice(p.getPrice());
+        pdto.setStock(p.getStock());
+        if (p.getCategory() != null)
+            pdto.setCategory(p.getCategory().getName());
+        if (p.getSubProduct() != null)
+            pdto.setSubProduct(p.getSubProduct().getName());
+        
+        Set<Opinion> opinions = p.getOpinions();
+        Set<OpinionDTO> opinionsDTO = new HashSet<>();
+        
+        // Transform model into DTO
+        for (Opinion o : opinions) {
+            OpinionDTO odto = new OpinionDTO();
+            odto.setCustomer(o.getCustomer().getEmail());
+            odto.setProduct(pdto);
+            odto.setRating(o.getRating());
+            if (o.getReview() != null)
+                odto.setReview(o.getReview());
+            
+            opinionsDTO.add(odto);
+        }
+        
+        return opinionsDTO;
+    }
 }
