@@ -40,4 +40,20 @@ public class PublicActions {
         return productsDTO;
     }
 
+    public static ProductDTO getProduct(int id){
+        if (id < 1) return null;
+        Product p = productOps.readProduct(id);
+        ProductDTO pdto = new ProductDTO();
+        pdto.setDescription(p.getDescription());
+        pdto.setId(p.getId());
+        pdto.setName(p.getName());
+        pdto.setPrice(p.getPrice());
+        pdto.setStock(p.getStock());
+        if (p.getCategory() != null)
+            pdto.setCategory(p.getCategory().getName());
+        if (p.getSubProduct() != null)
+            pdto.setSubProduct(p.getSubProduct().getName());
+        
+        return pdto;
+    }
 }
