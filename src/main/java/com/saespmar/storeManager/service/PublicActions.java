@@ -112,14 +112,14 @@ public class PublicActions {
         String hashedPassword = hashPassword(password);
         
         // Add the customer to the database
-        int id = customerOps.createCustomer(new Customer(email, hashedPassword));
-        
-        if (id == 0) return null;
-        else {
+        if (customerOps.searchCustomer(email) == null){
+            int id = customerOps.createCustomer(new Customer(email, hashedPassword));
             CustomerDTO cdto = new CustomerDTO();
             cdto.setEmail(email);
             cdto.setId(id);
             return cdto;
+        } else {
+            return null;
         }
     }
     
