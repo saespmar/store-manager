@@ -53,6 +53,27 @@ public class CustomerOpsImpl implements CustomerOps {
     }
     
     @Override
+    public Customer searchCustomer(String email){
+        EntityManager em = SetUpFactory.getEntityManager();
+        
+        String query = "SELECT c FROM Customer c WHERE c.email = :custEmail";
+        TypedQuery<Customer> tq = em.createQuery(query, Customer.class);
+        tq.setParameter("custEmail", email);
+        
+        Customer customer = null;
+        try {
+            customer = tq.getSingleResult();
+        }
+        catch(NoResultException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            em.close();
+        }
+        return customer;
+    }
+    
+    @Override
     public void updatePassword(int id, String password) {
         EntityManager em = SetUpFactory.getEntityManager();
         EntityTransaction et = null;
