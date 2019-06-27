@@ -39,6 +39,19 @@ public interface CustomerOps {
     
     /**
      *
+     * <p>Retrieves the customer from the database.</p>
+     * 
+     * <p>The customer will include the id, e-mail, password, first name, last name, 
+     * phone, street, zip code, city, state, country, orders and shopping cart fields 
+     * filled. On the other hand, the opinions field won't be available.</p>
+     *
+     * @param email the e-mail of the customer.
+     * @return the customer model object.
+     */
+    Customer searchCustomer(String email);
+    
+    /**
+     *
      * <p>Edits the password of the customer.</p>
      * 
      * <p>This method doesn't provide a hashing algorithm. It's highly recommended
