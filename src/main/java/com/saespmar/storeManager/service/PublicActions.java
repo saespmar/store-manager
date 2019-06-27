@@ -6,6 +6,7 @@ import com.saespmar.storeManager.operations.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -119,6 +120,48 @@ public class PublicActions {
             cdto.setEmail(email);
             cdto.setId(id);
             return cdto;
+        }
+    }
+    
+    public static CustomerDTO logIn(String email, String password){
+        Customer c = customerOps.searchCustomer(email);
+        
+        // Check if the password is correct
+        if (c != null && c.getPassword().equals(hashPassword(password))){
+            
+            // Transform model into DTO
+            CustomerDTO cdto = new CustomerDTO();
+            cdto.setCity(c.getCity());
+            cdto.setCountry(c.getCountry());
+            cdto.setEmail(c.getEmail());
+            cdto.setFirstName(c.getFirstName());
+            cdto.setId(c.getId());
+            cdto.setLastName(c.getLastName());
+            cdto.setPhone(c.getPhone());
+            cdto.setStreet(c.getStreet());
+            cdto.setUserState(c.getUserState());
+            cdto.setZipCode(c.getZipCode());
+            Set<ShoppingCart> cart = c.getInCart();
+            HashMap<ProductDTO, Integer> inCart = new HashMap<>();
+            for (ShoppingCart item : cart){
+                Product p = item.getProduct();
+                ProductDTO pdto = new ProductDTO();
+                pdto.setDescription(p.getDescription());
+                pdto.setId(p.getId());
+                pdto.setName(p.getName());
+                pdto.setPrice(p.getPrice());
+                pdto.setStock(p.getStock());
+                if (p.getCategory() != null)
+                    pdto.setCategory(p.getCategory().getName());
+                if (p.getSubProduct() != null)
+                    pdto.setSubProduct(p.getSubProduct().getName());
+                inCart.put(pdto, item.getQuantity());
+            }
+            cdto.setInCart(inCart);
+            
+            return cdto;
+        } else {
+            return null;
         }
     }
     
