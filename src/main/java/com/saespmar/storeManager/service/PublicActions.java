@@ -124,6 +124,7 @@ public class PublicActions {
     }
     
     public static CustomerDTO logIn(String email, String password){
+        if (email == null || password == null) return null;
         Customer c = customerOps.searchCustomer(email);
         
         // Check if the password is correct
@@ -166,6 +167,7 @@ public class PublicActions {
     }
     
     private static boolean validMail(String email){
+        if (email == null) return false;
         if (email.length() > 50) return false;
         if (email.indexOf('@') == -1) return false;
         String name = email.substring(0, email.indexOf('@')); // The string after the @
