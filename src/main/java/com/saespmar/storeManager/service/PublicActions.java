@@ -3,9 +3,6 @@ package com.saespmar.storeManager.service;
 import com.saespmar.storeManager.dto.*;
 import com.saespmar.storeManager.model.*;
 import com.saespmar.storeManager.operations.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -100,16 +97,16 @@ public class PublicActions {
         
         // Check if the password has an uppercase letter, a lowercase letter and a number
         boolean up = false, low = false, num = false;
-        for (int i = 0; i < password.length() && !securePassword(up, low, num); i++){
+        for (int i = 0; i < password.length() && !ServiceUtils.securePassword(up, low, num); i++){
             char current = password.charAt(i);
             if (!up && Character.isUpperCase(current)) up = true;
             else if (!low && Character.isLowerCase(current)) low = true;
             else if (!num && Character.isDigit(current)) num = true;
         }
-        if (!securePassword(up, low, num)) return null;
+        if (!ServiceUtils.securePassword(up, low, num)) return null;
         
         // Hash the password
-        String hashedPassword = hashPassword(password);
+        String hashedPassword = ServiceUtils.hashPassword(password);
         
         // Add the customer to the database
         if (customerOps.searchCustomer(email) == null){
@@ -128,7 +125,7 @@ public class PublicActions {
         Customer c = customerOps.searchCustomer(email);
         
         // Check if the password is correct
-        if (c != null && c.getPassword().equals(hashPassword(password))){
+        if (c != null && c.getPassword().equals(ServiceUtils.hashPassword(password))){
             
             // Transform model into DTO
             CustomerDTO cdto = new CustomerDTO();
@@ -176,32 +173,6 @@ public class PublicActions {
         String server = domain.substring(0, domain.indexOf('.')); // The string between the @ and the .
         String tld = domain.substring(domain.indexOf('.'), domain.length()); // The string after the .
         return name.length() > 0 && server.length() > 0 && tld.length() > 0;
-    }
-    
-    private static boolean securePassword(boolean uppercase, boolean lowercase, boolean number){
-        return uppercase && lowercase && number;
-    }
-    
-    private static String hashPassword(String password)
-    {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            byte[] messageDigest = md.digest(password.getBytes());
-            
-            // Convert into hex value
-            BigInteger signum = new BigInteger(1, messageDigest);
-            String hashedPassword = signum.toString(16);
-            
-            // If the hash isn't 32 bit, add zeros at the beginning
-            while (hashedPassword.length() < 32)
-                hashedPassword = "0" + hashedPassword;
-            
-            return hashedPassword;
-        }
-        
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
     }
     
 }

@@ -3,9 +3,6 @@ package com.saespmar.storeManager.service;
 import com.saespmar.storeManager.dto.*;
 import com.saespmar.storeManager.model.*;
 import com.saespmar.storeManager.operations.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -25,20 +22,20 @@ public class PrivateActions {
         // Check if the password is secure
         if (password.length() < 8 || password.length() > 30) return null;
         boolean up = false, low = false, num = false;
-        for (int i = 0; i < password.length() && !securePassword(up, low, num); i++){
+        for (int i = 0; i < password.length() && !ServiceUtils.securePassword(up, low, num); i++){
             char current = password.charAt(i);
             if (!up && Character.isUpperCase(current)) up = true;
             else if (!low && Character.isLowerCase(current)) low = true;
             else if (!num && Character.isDigit(current)) num = true;
         }
-        if (!securePassword(up, low, num)) return null;
+        if (!ServiceUtils.securePassword(up, low, num)) return null;
         
         // Check if the customer exists
         Customer c = customerOps.readCustomer(id);
         if(c == null) return null;
         
         // Update the password
-        String hashedPassword = hashPassword(password);
+        String hashedPassword = ServiceUtils.hashPassword(password);
         customerOps.updatePassword(id, hashedPassword);
         
         // Return the customer as a way to confirm the operation has been successfully completed
@@ -74,29 +71,4 @@ public class PrivateActions {
         return cdto;
     }
     
-    private static boolean securePassword(boolean uppercase, boolean lowercase, boolean number){
-        return uppercase && lowercase && number;
-    }
-    
-    private static String hashPassword(String password)
-    {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            byte[] messageDigest = md.digest(password.getBytes());
-            
-            // Convert into hex value
-            BigInteger signum = new BigInteger(1, messageDigest);
-            String hashedPassword = signum.toString(16);
-            
-            // If the hash isn't 32 bit, add zeros at the beginning
-            while (hashedPassword.length() < 32)
-                hashedPassword = "0" + hashedPassword;
-            
-            return hashedPassword;
-        }
-        
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
