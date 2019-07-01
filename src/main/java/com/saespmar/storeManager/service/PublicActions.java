@@ -3,7 +3,6 @@ package com.saespmar.storeManager.service;
 import com.saespmar.storeManager.dto.*;
 import com.saespmar.storeManager.model.*;
 import com.saespmar.storeManager.operations.*;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,78 +18,47 @@ public class PublicActions {
     
     
     public static Set<ProductDTO> getProductsFromCategory(int id) {
+        // Check input values
         if (id < 1) return null;
+        
+        // Transform all the Product models into DTO 
         Category category = categoryOps.readCategory(id);
         Set<Product> products = category.getProducts();
         Set<ProductDTO> productsDTO = new HashSet<>();
-        
-        // Transform model into DTO
         for (Product p : products) {
-            ProductDTO pdto = new ProductDTO();
-            pdto.setCategory(category.getName());
-            pdto.setDescription(p.getDescription());
-            pdto.setId(p.getId());
-            pdto.setName(p.getName());
-            pdto.setPrice(p.getPrice());
-            pdto.setStock(p.getStock());
-            if (p.getSubProduct() != null)
-                pdto.setSubProduct(p.getSubProduct().getName());
-            
-            productsDTO.add(pdto);
+            productsDTO.add(ServiceUtils.productTransform(p));
         }
         return productsDTO;
     }
     
     public static ProductDTO getProduct(int id){
+        // Check input values
         if (id < 1) return null;
-        Product p = productOps.readProduct(id);
-        ProductDTO pdto = new ProductDTO();
-        pdto.setDescription(p.getDescription());
-        pdto.setId(p.getId());
-        pdto.setName(p.getName());
-        pdto.setPrice(p.getPrice());
-        pdto.setStock(p.getStock());
-        if (p.getCategory() != null)
-            pdto.setCategory(p.getCategory().getName());
-        if (p.getSubProduct() != null)
-            pdto.setSubProduct(p.getSubProduct().getName());
         
-        return pdto;
+        Product p = productOps.readProduct(id);        
+        return ServiceUtils.productTransform(p);
     }
     
     public static Set<OpinionDTO> getOpinions(int id){
+        // Check input values
         if (id < 1) return null;
-        Product p = productOps.readProduct(id);
-        ProductDTO pdto = new ProductDTO();
-        pdto.setDescription(p.getDescription());
-        pdto.setId(p.getId());
-        pdto.setName(p.getName());
-        pdto.setPrice(p.getPrice());
-        pdto.setStock(p.getStock());
-        if (p.getCategory() != null)
-            pdto.setCategory(p.getCategory().getName());
-        if (p.getSubProduct() != null)
-            pdto.setSubProduct(p.getSubProduct().getName());
         
+        // All the opinions need an associated ProductDTO
+        Product p = productOps.readProduct(id);
+        ProductDTO pdto = ServiceUtils.productTransform(p);
+        
+        // Transform models into DTO 
         Set<Opinion> opinions = p.getOpinions();
         Set<OpinionDTO> opinionsDTO = new HashSet<>();
-        
-        // Transform model into DTO
         for (Opinion o : opinions) {
-            OpinionDTO odto = new OpinionDTO();
-            odto.setCustomer(o.getCustomer().getEmail());
-            odto.setProduct(pdto);
-            odto.setRating(o.getRating());
-            if (o.getReview() != null)
-                odto.setReview(o.getReview());
-            
-            opinionsDTO.add(odto);
+            opinionsDTO.add(ServiceUtils.opinionTransform(o, pdto));
         }
         
         return opinionsDTO;
     }
     
     public static CustomerDTO registerUser(String email, String password){
+        // Check input values
         if (email == null || password == null) return null;
         if (!validMail(email)) return null;
         if (password.length() < 8 || password.length() > 30) return null;
@@ -121,43 +89,13 @@ public class PublicActions {
     }
     
     public static CustomerDTO logIn(String email, String password){
+        // Check input values
         if (email == null || password == null) return null;
-        Customer c = customerOps.searchCustomer(email);
         
-        // Check if the password is correct
+        // Check if the customer exists and the password is correct
+        Customer c = customerOps.searchCustomer(email);
         if (c != null && c.getPassword().equals(ServiceUtils.hashPassword(password))){
-            
-            // Transform model into DTO
-            CustomerDTO cdto = new CustomerDTO();
-            cdto.setCity(c.getCity());
-            cdto.setCountry(c.getCountry());
-            cdto.setEmail(c.getEmail());
-            cdto.setFirstName(c.getFirstName());
-            cdto.setId(c.getId());
-            cdto.setLastName(c.getLastName());
-            cdto.setPhone(c.getPhone());
-            cdto.setStreet(c.getStreet());
-            cdto.setUserState(c.getUserState());
-            cdto.setZipCode(c.getZipCode());
-            Set<ShoppingCart> cart = c.getInCart();
-            HashMap<ProductDTO, Integer> inCart = new HashMap<>();
-            for (ShoppingCart item : cart){
-                Product p = item.getProduct();
-                ProductDTO pdto = new ProductDTO();
-                pdto.setDescription(p.getDescription());
-                pdto.setId(p.getId());
-                pdto.setName(p.getName());
-                pdto.setPrice(p.getPrice());
-                pdto.setStock(p.getStock());
-                if (p.getCategory() != null)
-                    pdto.setCategory(p.getCategory().getName());
-                if (p.getSubProduct() != null)
-                    pdto.setSubProduct(p.getSubProduct().getName());
-                inCart.put(pdto, item.getQuantity());
-            }
-            cdto.setInCart(inCart);
-            
-            return cdto;
+            return ServiceUtils.customerTransform(c);
         } else {
             return null;
         }
