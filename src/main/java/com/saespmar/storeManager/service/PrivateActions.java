@@ -42,4 +42,123 @@ public class PrivateActions {
         return ServiceUtils.customerTransform(c);
     }
     
+    public static CustomerDTO changeCity(int id, String city){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the city
+        customerOps.updateCity(id, city);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeCountry(int id, String country){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the country
+        customerOps.updateCountry(id, country);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeFirstName(int id, String firstName){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the first name
+        customerOps.updateFirstName(id, firstName);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeLastName(int id, String lastName){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the last name
+        customerOps.updateLastName(id, lastName);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changePhone(int id, String phone){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the phone
+        customerOps.updatePhone(id, phone);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeState(int id, String state){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the state
+        customerOps.updateState(id, state);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeStreet(int id, String street){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the street
+        customerOps.updateStreet(id, street);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
+    
+    public static CustomerDTO changeZipCode(int id, String zipCode){
+        // Check input values
+        if (id < 0) return null;
+        
+        // Check if the customer exists
+        Customer c = customerOps.readCustomer(id);
+        if(c == null) return null;
+        
+        // Update the zip code
+        customerOps.updateZipCode(id, zipCode);
+        
+        // Return the customer as a way to confirm the operation has been successfully completed
+        return ServiceUtils.customerTransform(c);
+    }
 }
