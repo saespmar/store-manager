@@ -242,5 +242,29 @@ public class PrivateActions {
         return odto;
     }
     
+    public static OpinionDTO reviewProduct(int productId, int customerId, int rating, String review){
+        
+        // Check input values
+        if (productId < 0 || customerId < 0 || rating < 0 || rating > 5) return null;
+        
+        // If the customer has already reviewed that product, return null
+        Product p = productOps.readProduct(productId);
+        Set<Opinion> opinions = p.getOpinions();
+        for (Opinion o : opinions){
+            if (o.getCustomer().getId() == customerId){
+                return null;
+            }
+        }
+        
+        // Otherwise, create a new opinion
+        productOps.addOpinion(productId, customerId, rating, review);
+        OpinionDTO odto = new OpinionDTO();
+        Customer c = customerOps.readCustomer(customerId);
+        odto.setCustomer(c.getFirstName() + " " + c.getLastName());
+        odto.setProduct(ServiceUtils.productTransform(p));
+        odto.setRating(rating);
+        odto.setReview(review);
+        return odto;
+    }
     
 }
