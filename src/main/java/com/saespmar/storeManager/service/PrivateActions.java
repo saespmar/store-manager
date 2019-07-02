@@ -3,6 +3,8 @@ package com.saespmar.storeManager.service;
 import com.saespmar.storeManager.dto.*;
 import com.saespmar.storeManager.model.*;
 import com.saespmar.storeManager.operations.*;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 
 
@@ -161,4 +163,38 @@ public class PrivateActions {
         // Return the customer as a way to confirm the operation has been successfully completed
         return ServiceUtils.customerTransform(c);
     }
+    
+    public static HashMap<ProductDTO, Integer> addToCart(int customerId, int productId, int quantity){
+        
+        // Check input values
+        if (customerId < 0 || productId < 0 || quantity < 1) return null;
+        Customer customer = customerOps.readCustomer(customerId);
+        if (customer == null) return null;
+        Product product = productOps.readProduct(productId);
+        if (product == null) return null;
+        if (product.getStock() < quantity) return null;
+        
+        // Check if the product was previously in the cart
+        Set<ShoppingCart> cart = customer.getInCart();
+        for (ShoppingCart item : cart){
+            if (item.getProduct().equals(product)){
+                
+                // Check if there's enough stock
+                if (product.getStock() < item.getQuantity() + quantity) return null;
+                
+                // Update the amount of that product in the cart
+                productOps.removeFromCart(productId, customerId);
+                customerOps.addToCart(customerId, productId, item.getQuantity() + quantity);
+                Customer c = customerOps.readCustomer(customerId);
+                return ServiceUtils.customerTransform(c).getInCart();
+            }
+        }
+        
+        // The product wasn't in the cart before, insert it normally
+        customerOps.addToCart(customerId, productId, quantity);
+        Customer c = customerOps.readCustomer(customerId);
+        return ServiceUtils.customerTransform(c).getInCart();
+        
+    }
+    
 }
