@@ -197,4 +197,50 @@ public class PrivateActions {
         
     }
     
+    public static OrderDTO placeOrder(int customerId){
+        
+        // Check input values
+        if (customerId < 0) return null;
+        
+        // Check if the cart has products in it
+        Customer customer = customerOps.readCustomer(customerId);
+        Set<ShoppingCart> cart = customer.getInCart();
+        if (cart.isEmpty()) return null;
+        
+        // Iterate through the cart to make the order
+        OrderDTO odto = new OrderDTO();
+        int orderId = userOrderOps.createUserOrder(new UserOrder(new Date()));
+        odto.setId(orderId);
+        odto.setOrderDate(new Date());
+        HashMap<ProductDTO, Integer> listOfProducts = new HashMap<>();
+        userOrderOps.updateCustomer(orderId, customerId);
+        for (ShoppingCart item : cart){
+            Product p = item.getProduct();
+            int quantity = item.getQuantity();
+            
+            // If there isn't enough stock, cancel the operation
+            if (quantity > p.getStock()){
+                userOrderOps.deleteUserOrder(orderId);
+                return null;
+            }
+            
+            // Add item to the order
+            userOrderOps.addProduct(orderId, p.getId(), quantity);
+            listOfProducts.put(ServiceUtils.productTransform(p), quantity);
+        }
+        
+        // Everything went ok, empty the shopping cart and substract the amount of available stock
+        for (ShoppingCart item : cart){
+            int pID = item.getProduct().getId();
+            productOps.removeFromCart(pID, customerId);
+            int previousStock = item.getProduct().getStock();
+            int bought = item.getQuantity();
+            productOps.updateStock(pID, previousStock-bought);
+        }
+        
+        odto.setProducts(listOfProducts);
+        return odto;
+    }
+    
+    
 }
