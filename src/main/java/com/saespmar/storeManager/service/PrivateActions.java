@@ -5,6 +5,7 @@ import com.saespmar.storeManager.model.*;
 import com.saespmar.storeManager.operations.*;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -267,4 +268,17 @@ public class PrivateActions {
         return odto;
     }
     
+    public static Set<OrderDTO> getAllOrders(int customerId){
+        
+        // Check input values
+        if (customerId < 0) return null;
+        
+        Customer c = customerOps.readCustomer(customerId);
+        Set<UserOrder> orders = c.getUserOrders();
+        Set<OrderDTO> ordersDTO = new HashSet<>();
+        for (UserOrder o : orders){
+            ordersDTO.add(ServiceUtils.orderTransform(o));
+        }
+        return ordersDTO;
+    }
 }
