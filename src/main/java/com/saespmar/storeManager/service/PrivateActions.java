@@ -198,6 +198,33 @@ public class PrivateActions {
         
     }
     
+    public static HashMap<ProductDTO, Integer> removeFromCart(int customerId, int productId){
+        
+        // Check input values
+        if (customerId < 0 || productId < 0) return null;
+        Customer customer = customerOps.readCustomer(customerId);
+        if (customer == null) return null;
+        Product product = productOps.readProduct(productId);
+        if (product == null) return null;
+        
+        // Check if the product is in the cart
+        Set<ShoppingCart> cart = customer.getInCart();
+        for (ShoppingCart item : cart){
+            if (item.getProduct().equals(product)){
+                
+                // Remove product
+                productOps.removeFromCart(productId, customerId);
+                
+                // Return the updated cart
+                Customer c = customerOps.readCustomer(customerId);
+                return ServiceUtils.customerTransform(c).getInCart();
+            }
+        }
+        
+        // The product isn't in the cart, return null
+        return null;
+    }
+    
     public static OrderDTO placeOrder(int customerId){
         
         // Check input values
