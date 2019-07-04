@@ -82,11 +82,11 @@ public class PublicActions {
         String hashedPassword = ServiceUtils.hashPassword(password);
         
         // Add the customer to the database
-        Customer c = customerOps.searchCustomer(email);
+        Customer c = customerOps.searchCustomer(email.toLowerCase());
         if (c == null){
-            int id = customerOps.createCustomer(new Customer(email, hashedPassword));
+            int id = customerOps.createCustomer(new Customer(email.toLowerCase(), hashedPassword));
             CustomerDTO cdto = new CustomerDTO();
-            cdto.setEmail(email);
+            cdto.setEmail(email.toLowerCase());
             cdto.setId(id);
             return cdto;
         } else {
@@ -99,7 +99,7 @@ public class PublicActions {
         if (email == null || password == null) throw new IllegalArgumentException("Parameters can't be null");
         
         // Check if the customer exists and the password is correct
-        Customer c = customerOps.searchCustomer(email);
+        Customer c = customerOps.searchCustomer(email.toLowerCase());
         if (c != null && c.getPassword().equals(ServiceUtils.hashPassword(password))){
             return ServiceUtils.customerTransform(c);
         } else {
