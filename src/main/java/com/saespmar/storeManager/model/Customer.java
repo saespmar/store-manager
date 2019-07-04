@@ -228,7 +228,8 @@ public class Customer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
-        return email.equals(((Customer) o).getEmail());
+        String oMail = ((Customer) o).getEmail().toLowerCase();
+        return email.toLowerCase().equals(oMail);
     }
     
     @Override
