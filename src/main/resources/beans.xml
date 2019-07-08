@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <bean id="categoryOps" class="com.saespmar.storeManager.operations.CategoryOpsImpl"/>
+    <bean id="customerOps" class="com.saespmar.storeManager.operations.CustomerOpsImpl"/>
+    <bean id="productOps" class="com.saespmar.storeManager.operations.ProductOpsImpl"/>
+    <bean id="subProductOps" class="com.saespmar.storeManager.operations.SubProductOpsImpl"/>
+    <bean id="userOrderOps" class="com.saespmar.storeManager.operations.UserOrderOpsImpl"/>
+    <bean id="publicActions" class="com.saespmar.storeManager.service.PublicActions">
+        <property name="categoryOps" ref="categoryOps"/>
+        <property name="customerOps" ref="customerOps"/>
+        <property name="productOps" ref="productOps"/>
+        <property name="subProductOps" ref="subProductOps"/>
+        <property name="userOrderOps" ref="userOrderOps"/>
+    </bean>
+    <bean id="privateActions" class="com.saespmar.storeManager.service.PrivateActions">
+        <property name="categoryOps" ref="categoryOps"/>
+        <property name="customerOps" ref="customerOps"/>
+        <property name="productOps" ref="productOps"/>
+        <property name="subProductOps" ref="subProductOps"/>
+        <property name="userOrderOps" ref="userOrderOps"/>
+    </bean>
+
+</beans>
