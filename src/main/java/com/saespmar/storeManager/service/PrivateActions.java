@@ -12,12 +12,31 @@ import java.util.Set;
 
 public class PrivateActions {
     
-    static CategoryOps categoryOps = new CategoryOpsImpl();
-    static CustomerOps customerOps = new CustomerOpsImpl();
-    static ProductOps productOps = new ProductOpsImpl();
-    static SubProductOps subProductOps = new SubProductOpsImpl();
-    static UserOrderOps userOrderOps = new UserOrderOpsImpl();
-    static PublicActions publicActions = new PublicActions();
+    private static CategoryOps categoryOps;
+    private static CustomerOps customerOps;
+    private static ProductOps productOps;
+    private static SubProductOps subProductOps;
+    private static UserOrderOps userOrderOps;
+
+    public static void setCategoryOps(CategoryOps categoryOps) {
+        PrivateActions.categoryOps = categoryOps;
+    }
+
+    public static void setCustomerOps(CustomerOps customerOps) {
+        PrivateActions.customerOps = customerOps;
+    }
+
+    public static void setProductOps(ProductOps productOps) {
+        PrivateActions.productOps = productOps;
+    }
+
+    public static void setSubProductOps(SubProductOps subProductOps) {
+        PrivateActions.subProductOps = subProductOps;
+    }
+
+    public static void setUserOrderOps(UserOrderOps userOrderOps) {
+        PrivateActions.userOrderOps = userOrderOps;
+    }
     
     public static CustomerDTO changePassword(int id, String password) throws CustomerNotFoundException{
         // Check input values
