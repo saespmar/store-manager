@@ -11,12 +11,31 @@ import java.util.Set;
 
 public class PublicActions {
     
-    static CategoryOps categoryOps = new CategoryOpsImpl();
-    static CustomerOps customerOps = new CustomerOpsImpl();
-    static ProductOps productOps = new ProductOpsImpl();
-    static SubProductOps subProductOps = new SubProductOpsImpl();
-    static UserOrderOps userOrderOps = new UserOrderOpsImpl();
-    
+    private static CategoryOps categoryOps;
+    private static CustomerOps customerOps;
+    private static ProductOps productOps;
+    private static SubProductOps subProductOps;
+    private static UserOrderOps userOrderOps;
+
+    public static void setCategoryOps(CategoryOps categoryOps) {
+        PublicActions.categoryOps = categoryOps;
+    }
+
+    public static void setCustomerOps(CustomerOps customerOps) {
+        PublicActions.customerOps = customerOps;
+    }
+
+    public static void setProductOps(ProductOps productOps) {
+        PublicActions.productOps = productOps;
+    }
+
+    public static void setSubProductOps(SubProductOps subProductOps) {
+        PublicActions.subProductOps = subProductOps;
+    }
+
+    public static void setUserOrderOps(UserOrderOps userOrderOps) {
+        PublicActions.userOrderOps = userOrderOps;
+    }
     
     public static Set<ProductDTO> getProductsFromCategory(int id) throws CategoryNotFoundException {
         // Check input values
