@@ -26,4 +26,12 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
         <property name="userOrderOps" ref="userOrderOps"/>
     </bean>
 
+    <bean id="loggingBean" class="com.saespmar.storeManager.aspect.LoggingAspect" />
+    <aop:config>
+        <aop:pointcut id="operationsPC" expression="execution(* com.saespmar.storeManager.operations.*.*(..))"/>
+        <aop:aspect id="loggingAspect" ref="loggingBean">
+            <aop:around pointcut-ref="operationsPC" method="logging" />
+        </aop:aspect>
+    </aop:config>
+
 </beans>
